@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::prefix('excel')->middleware('auth.basicIn')->group(function ($route) {
+    $route->post('upload', [ImportController::class, 'upload']);
+    $route->get('getData', [ImportController::class, 'getImportedData']);
 });

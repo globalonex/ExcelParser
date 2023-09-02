@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ApiToken;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +15,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Создайте пользователя
+        $user = User::create([
+            'name' => 'admin',
+            'email' => 'admin@mail.ru',
+            'password' => bcrypt(config('auth.basicPassword')),
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Генерируйте API ключ и привяжите его к пользователю
+        $apiToken = ApiToken::create([
+            'token' => ApiToken::generateToken(),
+        ]);
+
+        Log::info('Ваш токен: ' . $apiToken->token);
+
+        $user->apiTokens()->attach($apiToken);
     }
 }

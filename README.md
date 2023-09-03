@@ -15,6 +15,7 @@
 composer install
 php artisan key:generate
 php artisan migrate
+php artisan queue:work
 ```
 2. You can change password in the file .env
 ```
